@@ -1,10 +1,21 @@
 package Biblio::ILL::GS;
 
+=head1 NAME
+
+Biblio::ILL::GS - Interlibrary Loan Generic Script (GS)
+
+=cut
+
 use strict;
 use warnings;
 use Carp qw( carp croak );
 
-our $VERSION = '0.04';
+=head1 VERSION
+
+Version 0.05
+
+=cut
+our $VERSION = '0.05';
 
 my @validFields = (
     'LSB',   # Library Symbol, Borrower
@@ -27,77 +38,6 @@ my @validFields = (
     'SRC',   # Source of your information
     'REM',   # Remarks
 );
-
-sub new { 
-    my $class = shift;
-    return( bless { }, ref($class) || $class );
-}
-
-sub set {
-    my ($self,$fieldname,@ary) = @_;
-    if ( ! grep /$fieldname/, @validFields ) {
-	croak( "invalid field $fieldname" );
-    }
-    $self->{$fieldname} = [ @ary ];
-}
-
-sub as_string {
-
-    my $self = shift;
-    my $GS;
-
-    # verify that we have the (minimum) data we need
-
-    foreach ( qw( LSB LSP ADR SER AUT TIT ) ) {
-	if ( ! defined( $self->{ $_ } ) ) { 
-	    croak( "missing mandatory field: $_" );
-	}
-    }
-
-    # I think this is the real start of the GS msg....
-    $GS .= "\t\t\tILL REQUEST/DEMANDE DE PEB\n\n";
-
-    # why do only some of these check for existence
-    # - some are mandatory, some optional (but handy)
-    $GS .= "LSB:" . _stringify( @{ $self->{"LSB"} });
-    $GS .= "LSP:" . _stringify( @{ $self->{"LSP"} });
-    $GS .= "A#C:" . _stringify( @{ $self->{"A#C"} }) if ($self->{"A#C"});
-    $GS .= "P/U:" . _stringify( @{ $self->{"P/U"} }) if ($self->{"P/U"});
-    $GS .= "N/R:" . _stringify( @{ $self->{"N/R"} }) if ($self->{"N/R"});
-    $GS .= "ADR:" . _stringify( @{ $self->{"ADR"} });
-    $GS .= "SER:" . _stringify( @{ $self->{"SER"} });
-    $GS .= "AUT:" . _stringify( @{ $self->{"AUT"} });
-    $GS .= "TIT:" . _stringify( @{ $self->{"TIT"} });
-    $GS .= "P/L:" . _stringify( @{ $self->{"P/L"} }) if ($self->{"P/L"});
-    $GS .= "P/M:" . _stringify( @{ $self->{"P/M"} }) if ($self->{"P/M"});
-    $GS .= "EDN:" . _stringify( @{ $self->{"EDN"} }) if ($self->{"N/R"});
-    $GS .= "DAT:" . _stringify( @{ $self->{"DAT"} }) if ($self->{"DAT"});
-    $GS .= "LCN:" . _stringify( @{ $self->{"LCN"} }) if ($self->{"LCN"});
-    $GS .= "SBN:" . _stringify( @{ $self->{"SBN"} }) if ($self->{"SBN"});
-    $GS .= "SRC:" . _stringify( @{ $self->{"SRC"} }) if ($self->{"SRC"});
-    $GS .= "REM:" . _stringify( @{ $self->{"REM"} }) if ($self->{"REM"});
-
-    return( $GS );
-
-}
-
-sub _stringify {
-    my (@v) = @_;
-    my $s;
-    foreach my $elem (@v) {
-	$s .= "\t" . $elem . "\n";
-    }
-    return( $s );
-}
-
-1;
-
-
-__END__
-
-=head1 NAME
-
-Biblio::ILL::GS - Interlibrary Loan Generic Script (GS)
 
 =head1 SYNOPSIS
 
@@ -156,6 +96,14 @@ Create the Biblio::ILL::GS object.
 
     my $gs = new Biblio::ILL::GS;
 
+=cut
+
+sub new { 
+    my $class = shift;
+    return( bless { }, ref($class) || $class );
+}
+
+
 =head2 set()
 
 Set a field in the object. Fields can accept multiple values, which you pass in
@@ -167,10 +115,77 @@ LSB, LSP A#C P/U N/R ADR SER AUT TIT P/L P/M EDN DAT LCN SBN NUM #AD SRC REM
     $gs->set( 'TIT', 'Huckleberry Finn' );
     $gs->set( 'REM', 'This is a comment.', 'This is another comment' );
 
+=cut
+
+sub set {
+    my ($self,$fieldname,@ary) = @_;
+    if ( ! grep /$fieldname/, @validFields ) {
+	croak( "invalid field $fieldname" );
+    }
+    $self->{$fieldname} = [ @ary ];
+}
+
+
 =head2 as_string()
 
 Returns the GS message as a string, or undef if the minimum data is not
 present (LSB, LSP, ADR, SER, AUT, and TIT).
+
+=cut
+
+sub as_string {
+
+    my $self = shift;
+    my $GS;
+
+    # verify that we have the (minimum) data we need
+
+    foreach ( qw( LSB LSP ADR SER AUT TIT ) ) {
+	if ( ! defined( $self->{ $_ } ) ) { 
+	    croak( "missing mandatory field: $_" );
+	}
+    }
+
+    # I think this is the real start of the GS msg....
+    $GS .= "\t\t\tILL REQUEST/DEMANDE DE PEB\n\n";
+
+    # why do only some of these check for existence
+    # - some are mandatory, some optional (but handy)
+    $GS .= "LSB:" . _stringify( @{ $self->{"LSB"} });
+    $GS .= "LSP:" . _stringify( @{ $self->{"LSP"} });
+    $GS .= "A#C:" . _stringify( @{ $self->{"A#C"} }) if ($self->{"A#C"});
+    $GS .= "P/U:" . _stringify( @{ $self->{"P/U"} }) if ($self->{"P/U"});
+    $GS .= "N/R:" . _stringify( @{ $self->{"N/R"} }) if ($self->{"N/R"});
+    $GS .= "ADR:" . _stringify( @{ $self->{"ADR"} });
+    $GS .= "SER:" . _stringify( @{ $self->{"SER"} });
+    $GS .= "AUT:" . _stringify( @{ $self->{"AUT"} });
+    $GS .= "TIT:" . _stringify( @{ $self->{"TIT"} });
+    $GS .= "P/L:" . _stringify( @{ $self->{"P/L"} }) if ($self->{"P/L"});
+    $GS .= "P/M:" . _stringify( @{ $self->{"P/M"} }) if ($self->{"P/M"});
+    $GS .= "EDN:" . _stringify( @{ $self->{"EDN"} }) if ($self->{"N/R"});
+    $GS .= "DAT:" . _stringify( @{ $self->{"DAT"} }) if ($self->{"DAT"});
+    $GS .= "LCN:" . _stringify( @{ $self->{"LCN"} }) if ($self->{"LCN"});
+    $GS .= "SBN:" . _stringify( @{ $self->{"SBN"} }) if ($self->{"SBN"});
+    $GS .= "SRC:" . _stringify( @{ $self->{"SRC"} }) if ($self->{"SRC"});
+    $GS .= "REM:" . _stringify( @{ $self->{"REM"} }) if ($self->{"REM"});
+
+    return( $GS );
+
+}
+
+sub _stringify {
+    my (@v) = @_;
+    my $s;
+    foreach my $elem (@v) {
+	$s .= "\t" . $elem . "\n";
+    }
+    return( $s );
+}
+
+1;
+
+
+__END__
 
 =head1 SEE ALSO
 

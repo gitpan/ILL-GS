@@ -1,5 +1,9 @@
 Revision history for Perl extension ILL_GS.
 
+0.05  Tue Dec 09 16:43:17 2003
+        - Added ABSTRACT to Makefile.PL, to have the abstract
+	  show up properly on CPAN.
+
 0.04  Wed May 21 10:00:00 2003
 	- fixed POD example code (replacing $self->set with $gs->set)
 
