@@ -1,5 +1,8 @@
 Revision history for Perl extension ILL_GS.
 
+0.04  Wed May 21 10:00:00 2003
+	- fixed POD example code (replacing $self->set with $gs->set)
+
 0.03  Wed May 15 15:12:00 2003
         - as_string() now returns undef if missing mandatory fields
 	- added test 011_mindata.t

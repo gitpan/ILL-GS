@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Carp qw( carp croak );
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my @validFields = (
     'LSB',   # Library Symbol, Borrower
@@ -104,30 +104,30 @@ Biblio::ILL::GS - Interlibrary Loan Generic Script (GS)
     use Biblio::ILL::GS;
     my $gs = new Biblio::ILL::GS;
 
-    $self->set("LSB", "MWPL" );
-    $self->set("LSP", "BVAS" );
-    $self->set("P/U", "Christensen, David" );
+    $gs->set("LSB", "MWPL" );
+    $gs->set("LSP", "BVAS" );
+    $gs->set("P/U", "Christensen, David" );
 
-    $self->set( "ADR", 
+    $gs->set( "ADR", 
 	"Public Library Services",
 	"Interlibrary Loan Department",
 	"1525 First Street South",
 	"Brandon, MB  R7A 7A1"
     );
 
-    $self->set("SER", "LOAN" );
-    $self->set("AUT", "Wall, Larry" );
-    $self->set("TIT", "Programming Perl" );
-    $self->set("P/L", "Cambridge, Mass." );
-    $self->set("P/M", "O'Reilly" );
-    $self->set("EDN", "2nd Ed." );
-    $self->set("DAT", "2000" );
-    $self->set("SBN", "0596000278" );
-    $self->set("SRC", "TEST SCRIPT" );
-    $self->set("REM", "This is a comment.", "And another comment." );
+    $gs->set("SER", "LOAN" );
+    $gs->set("AUT", "Wall, Larry" );
+    $gs->set("TIT", "Programming Perl" );
+    $gs->set("P/L", "Cambridge, Mass." );
+    $gs->set("P/M", "O'Reilly" );
+    $gs->set("EDN", "2nd Ed." );
+    $gs->set("DAT", "2000" );
+    $gs->set("SBN", "0596000278" );
+    $gs->set("SRC", "TEST SCRIPT" );
+    $gs->set("REM", "This is a comment.", "And another comment." );
 
     # ouptut our string
-    print $self->as_string();
+    print $gs->as_string();
 
 
 =head1 DESCRIPTION
